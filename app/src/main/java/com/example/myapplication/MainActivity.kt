@@ -1,12 +1,10 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.provider.MediaStore.Audio.Radio
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,18 +17,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -134,8 +131,17 @@ fun SpecificationList(
                         ) {
 
                             if (it.name.firstOrNull() == "Apartment Size"){
-//                                RadioButton(selected =, onClick = { /*TODO*/ })
-                                //Implement radio button here
+                                RadioButton(
+                                    selected = item.name.firstOrNull() == vm.selectedApartmentOption?.name?.firstOrNull(),
+                                    onClick = {
+                                        vm.selectedApartmentOption = item
+                                        vm.updateApartmentPrice(item.price)
+                                    },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xff07a8c1),
+                                        unselectedColor = Color(0xffa3cbca)
+                                    )
+                                )
 
                             }
                             else {
@@ -194,11 +200,19 @@ fun SpecificationList(
         }
 
         if (vm.totalPrice>0) {
-            ElevatedCard(Modifier.padding(horizontal = 2.dp).fillMaxWidth().height(LocalConfiguration.current.screenWidthDp.dp* 0.2f)) {
-                Text(
-                    text = "Total Price: ${vm.totalPrice}",
-                    modifier = Modifier.padding(10.dp)
-                )
+            ElevatedCard(
+                Modifier
+                    .padding(horizontal = 2.dp)
+                    .fillMaxWidth()
+                    .height(LocalConfiguration.current.screenWidthDp.dp * 0.2f)) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.align(Alignment.End).padding(10.dp)
+                ) {
+                    Text(
+                        text = "Add To Cart- ₹${vm.totalPrice}",
+                    )
+                }
             }
         }
     }
