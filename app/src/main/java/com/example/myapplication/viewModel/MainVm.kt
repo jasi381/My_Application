@@ -22,9 +22,15 @@ class SpecificationViewModel : ViewModel() {
 
     fun toggleItemSelected(itemId: String, price: Int) {
         val isSelected = _selectedItems[itemId] ?: false
-        _selectedItems[itemId] = !isSelected
-        _selectedPrices[itemId] = if (!isSelected) price else 0
-        updateTotalPrice()
+        if (!isSelected) {
+            _selectedItems.keys.forEach { key ->
+                _selectedItems[key] = false
+                _selectedPrices[key] = 0
+            }
+            _selectedItems[itemId] = true
+            _selectedPrices[itemId] = price
+            updateTotalPrice()
+        }
     }
 
     fun updateApartmentPrice(price: Int) {
@@ -42,7 +48,6 @@ class SpecificationViewModel : ViewModel() {
 
         _totalPrice.intValue = apartmentPrice + selectedItemsPrice
     }
-
 
     fun updateItemQuantity(itemId: String, quantity: Int) {
         _itemQuantities[itemId] = quantity
